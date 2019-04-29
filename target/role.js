@@ -1,0 +1,2 @@
+import request from '@/plugins/axios'
+export function getrole(){return request({url: '/role ',method:'get',})}export function postroleempower(data){return request({url: '/role/empower ',method:'post',data})}

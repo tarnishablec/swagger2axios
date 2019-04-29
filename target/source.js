@@ -1,0 +1,2 @@
+import request from '@/plugins/axios'
+export function postsource(data){return request({url: '/source ',method:'post',data})}export function getsourceall(){return request({url: '/source/all ',method:'get',})}export function getsourceidBysourceId(sourceId,){return request({url: `/source/id/${sourceId} `,method:'get',})}export function getsourcetokenBysourceToken(sourceToken,){return request({url: `/source/token/${sourceToken} `,method:'get',})}export function deletesourceBysourceId(sourceId,){return request({url: `/source/${sourceId} `,method:'delete',})}
