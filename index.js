@@ -4,7 +4,7 @@ var fs = require("fs");
 var axios_1 = require("axios");
 var apis = [];
 // let swaggerData;
-var swaggerUrl = 'http://172.16.10.66:8080/swagger/docs/v1';
+var swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 // let file = fs.readFileSync("v1.json", "utf8");
 axios_1["default"].get(swaggerUrl).then(function (res) {
     handerSwagger(res.data);
