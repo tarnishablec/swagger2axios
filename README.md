@@ -1,5 +1,11 @@
 # swagger2axios
 
+先运行
+```
+npm install
+```
+安装依赖
+
 把swagger的 网页上面的api地址填写到index.js的  
 ```javascript
 var swaggerUrl = '';
