@@ -11,7 +11,10 @@ npm install
 var swaggerUrl = '';
 ```
 
-运行 node index.js  
+运行
+```
+node index.js  
+```
 生成axios实例接口到target目录  
 
 
