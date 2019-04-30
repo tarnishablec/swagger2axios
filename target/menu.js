@@ -1,2 +1,0 @@
-import request from '@/plugins/axios'
-export function postmenu(data){return request({url: '/menu ',method:'post',data})}export function getmenuall(){return request({url: '/menu/all ',method:'get',})}export function postmenuroeIds(data){return request({url: '/menu/roeIds ',method:'post',data})}export function deletemenuBymenuId(menuId,){return request({url: `/menu/${menuId} `,method:'delete',})}

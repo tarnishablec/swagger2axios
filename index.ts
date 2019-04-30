@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import axios from 'axios'
 
 interface StringMap {
     [k: string]: Array<any>
@@ -6,44 +7,64 @@ interface StringMap {
 
 const apis: Array<any> = [];
 
-let file = fs.readFileSync("api-docs.json", "utf8");
+// let swaggerData;
+let swaggerUrl = 'http://172.16.10.66:8080/swagger/docs/v1';
 
-let paths = JSON.parse(file).paths;
+// let file = fs.readFileSync("v1.json", "utf8");
+axios.get(swaggerUrl).then(res=>{
+    handerSwagger(res.data);
+})
 
-// console.log(paths)
-for (let key in paths) {
-    let u = key.toString().replace(/{/g, '${');
-    let m = Object.keys(paths[key])[0]
-    let p: any = { url: u, method: m };
-    if (paths[key][m].parameters !== undefined) {
-        if (paths[key][m].parameters[0].in === 'body') {
-            p['data'] = "1"
+function handerSwagger(data) {
+    console.log(data);
+    
+    let paths = data.paths;
+
+    // console.log(paths)
+    for (let key in paths) {
+        let u = key.toString().replace(/{/g, '${');
+        let m = Object.keys(paths[key])[0]
+        let p: any = { url: u, method: m };
+        if (paths[key][m].parameters !== undefined) {
+            if (paths[key][m].parameters[0].in === 'body') {
+                p['data'] = "1"
+            } else {
+                p['data'] = "0";
+            }
         } else {
             p['data'] = "0";
         }
-    } else {
-        p['data'] = "0";
+        apis.push(p);
     }
-    apis.push(p);
-}
-// console.log(apis)
+    // console.log(apis)
 
-const pres: StringMap = {};
-const fileHead = "import request from '@/plugins/axios'\n";
+    const pres: StringMap = {};
+    const fileHead = "import request from '@/plugins/axios'\n";
 
 
-const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/
-for (let api of apis) {
-    // console.log(api.url);
+    const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/
+    for (let api of apis) {
+        // console.log(api.url);
 
-    let fileName = re.exec(api.url)[1];
-    // console.log(fileName);
+        let fileName = re.exec(api.url)[1];
+        // console.log(fileName);
 
-    if (!Object.keys(pres).includes(fileName)) {
-        pres[fileName] = [];
+        if (!Object.keys(pres).includes(fileName)) {
+            pres[fileName] = [];
+        }
+
+        pres[fileName] = pres[fileName].concat(api)
     }
 
-    pres[fileName] = pres[fileName].concat(api)
+    for (let pre in pres) {
+        let content: string = '';
+
+        for (let a of pres[pre]) {
+            content = content.concat(buildApi(a))
+        }
+
+        fs.writeFileSync('./target/' + pre + '.js', fileHead + '' + content)
+    }
 }
 
 // console.log(pres)
@@ -57,25 +78,14 @@ function buildApi(api: any) {
     let re = /\{([a-zA-Z]+)\}/g;
     let ar: Array<string> = api.url.match(re);
     // console.log(ar)
-    let str = `export function ${api.method}${tempUrl}(${!!ar?array2string(ar):''}${(api.data==="1")?'data':''}){return request({url: ${!!ar?'\`':'\''}${api.url} ${!!ar?'\`':'\''},method:'${api.method}',${(api.data==="1")?'data':''}})}`;
+    let str = `export function ${api.method}${tempUrl}(${!!ar ? array2string(ar) : ''}${(api.data === "1") ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}${api.url} ${!!ar ? '\`' : '\''},method:'${api.method}',${(api.data === "1") ? 'data' : ''}})}`;
     return str;
 }
 
-function array2string(ar:Array<String>){
+function array2string(ar: Array<String>) {
     let str = '';
-    for(let i of ar){
-        str = str.concat(i+",");
+    for (let i of ar) {
+        str = str.concat(i + ",");
     }
-    return str.replace(/(\{|\})/g,'');
+    return str.replace(/(\{|\})/g, '');
 }
-
-for (let pre in pres) {
-    let content:string  = '';
-
-    for(let a of pres[pre]){
-        content = content.concat(buildApi(a))
-    }
-
-    fs.writeFileSync('./target/' + pre + '.js', fileHead+''+content)
-}
-
