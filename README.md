@@ -1,7 +1,7 @@
 # swagger2axios
 
 把swagger的 网页上面的api地址填写到index.js的  
-```
+```javascript
 var swaggerUrl = '';
 ```
 运行 node index.js  
