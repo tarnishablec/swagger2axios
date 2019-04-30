@@ -6,7 +6,7 @@ npm install
 ```
 安装依赖
 
-把swagger的 网页上面的api地址填写到index.js的  
+把swagger的网页上面的api地址(不是浏览器地址栏地址)填写到index.js的  
 ```javascript
 var swaggerUrl = '';
 ```
