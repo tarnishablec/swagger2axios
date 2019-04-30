@@ -1,6 +1,9 @@
 # swagger2axios
 
-把swagger的 api-docs.json 文件拉出来 放在根目录  
+把swagger的 网页上面的api地址填写到index.js的  
+```
+var swaggerUrl = '';
+```
 运行 node index.js  
 生成axios实例接口到target目录  
 
