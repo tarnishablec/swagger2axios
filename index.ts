@@ -8,7 +8,7 @@ interface StringMap {
 const apis: Array<any> = [];
 
 // let swaggerData;
-let swaggerUrl = 'http://172.16.10.66:8080/swagger/docs/v1';
+let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 
 // let file = fs.readFileSync("v1.json", "utf8");
 axios.get(swaggerUrl).then(res=>{
@@ -16,7 +16,7 @@ axios.get(swaggerUrl).then(res=>{
 })
 
 function handerSwagger(data) {
-    console.log(data);
+    // console.log(data);
     
     let paths = data.paths;
 

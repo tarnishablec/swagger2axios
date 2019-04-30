@@ -10,7 +10,7 @@ axios_1["default"].get(swaggerUrl).then(function (res) {
     handerSwagger(res.data);
 });
 function handerSwagger(data) {
-    console.log(data);
+    // console.log(data);
     var paths = data.paths;
     // console.log(paths)
     for (var key in paths) {
