@@ -55,7 +55,7 @@ function handerSwagger(data, dir, prepend) {
     }
     // console.log(apis)
     var pres = {};
-    var fileHead = "import request from 'src/plugins/axios'\n";
+    var fileHead = "import request from '@/plugins/axios'\n";
     var re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
     for (var _i = 0, apis_1 = apis; _i < apis_1.length; _i++) {
         var api = apis_1[_i];

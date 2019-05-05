@@ -1,2 +1,2 @@
-import request from 'src/plugins/axios'
+import request from '@/plugins/axios'
 export function getUserDeptUserList(){return request({url: '/api1/user/deptUserList ',method:'get',})}export function getUserGroupUserList(){return request({url: '/api1/user/groupUserList ',method:'get',})}export function postUserLogin(data){return request({url: '/api1/user/login ',method:'post',data})}export function getUserRoleUserList(){return request({url: '/api1/user/roleUserList ',method:'get',})}

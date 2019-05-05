@@ -65,7 +65,7 @@ function handerSwagger(data, dir, prepend) {
     // console.log(apis)
 
     const pres: StringMap = {};
-    const fileHead = "import request from 'src/plugins/axios'\n";
+    const fileHead = "import request from '@/plugins/axios'\n";
 
 
     const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/

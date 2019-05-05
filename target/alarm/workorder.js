@@ -1,2 +1,2 @@
-import request from 'src/plugins/axios'
+import request from '@/plugins/axios'
 export function postWorkorderAdd(data){return request({url: '/api1/workorder/add ',method:'post',data})}export function postWorkorderEdit(data){return request({url: '/api1/workorder/edit ',method:'post',data})}export function postWorkorderGetSourceByTokenBySourceToken(sourceToken,){return request({url: `/api1/workorder/getSourceByToken/${sourceToken} `,method:'post',})}export function postWorkorderQueryAllList(){return request({url: '/api1/workorder/queryAllList ',method:'post',})}export function postWorkorderQueryByIdBySourceId(sourceId,){return request({url: `/api1/workorder/queryById/${sourceId} `,method:'post',})}
