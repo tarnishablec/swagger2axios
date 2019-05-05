@@ -49,18 +49,20 @@ function handerSwagger(data, dir, prepend) {
     // console.log(paths)
     for (let key in paths) {
         let u = key.toString().replace(/{/g, '${');
-        let m = Object.keys(paths[key])[0]
-        let p: any = { url: u, method: m };
-        if (paths[key][m].parameters !== undefined) {
-            if (paths[key][m].parameters[0].in === 'body') {
-                p['data'] = "1"
+        let ms = Object.keys(paths[key])
+        for(let m of ms){
+            let p: any = { url: u, method: m };
+            if (paths[key][m].parameters !== undefined) {
+                if (paths[key][m].parameters[0].in === 'body') {
+                    p['data'] = "1"
+                } else {
+                    p['data'] = "0";
+                }
             } else {
                 p['data'] = "0";
             }
-        } else {
-            p['data'] = "0";
+            apis.push(p);
         }
-        apis.push(p);
     }
     // console.log(apis)
 
@@ -108,7 +110,9 @@ function buildApi(api: any, prepend) {
     let re = /\{([a-zA-Z]+)\}/g;
     let ar: Array<string> = api.url.match(re);
     // console.log(ar)
-    let str = `export function ${api.method}${tempUrl}(${!!ar ? array2String(ar) : ''}${(api.data === "1") ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}${prepend}${api.url} ${!!ar ? '\`' : '\''},method:'${api.method}',${(api.data === "1") ? 'data' : ''}})}`;
+    let str = `export function ${api.method}${tempUrl}(${!!ar ? array2String(ar) : ''}${(api.data === "1") ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}${prepend}${api.url} ${!!ar ? '\`' : '\''},method:'${api.method}',${(api.data === "1") ? 'data' : ''}}).then(res => {
+		return res.data.data
+	})}`;
     return str;
 }
 

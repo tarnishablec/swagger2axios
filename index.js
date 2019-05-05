@@ -38,27 +38,30 @@ function handerSwagger(data, dir, prepend) {
     // console.log(paths)
     for (var key in paths) {
         var u = key.toString().replace(/{/g, '${');
-        var m = Object.keys(paths[key])[0];
-        var p = { url: u, method: m };
-        if (paths[key][m].parameters !== undefined) {
-            if (paths[key][m].parameters[0]["in"] === 'body') {
-                p['data'] = "1";
+        var ms = Object.keys(paths[key]);
+        for (var _i = 0, ms_1 = ms; _i < ms_1.length; _i++) {
+            var m = ms_1[_i];
+            var p = { url: u, method: m };
+            if (paths[key][m].parameters !== undefined) {
+                if (paths[key][m].parameters[0]["in"] === 'body') {
+                    p['data'] = "1";
+                }
+                else {
+                    p['data'] = "0";
+                }
             }
             else {
                 p['data'] = "0";
             }
+            apis.push(p);
         }
-        else {
-            p['data'] = "0";
-        }
-        apis.push(p);
     }
     // console.log(apis)
     var pres = {};
     var fileHead = "import request from '@/plugins/axios'\n";
     var re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
-    for (var _i = 0, apis_1 = apis; _i < apis_1.length; _i++) {
-        var api = apis_1[_i];
+    for (var _a = 0, apis_1 = apis; _a < apis_1.length; _a++) {
+        var api = apis_1[_a];
         // console.log(api.url);
         var fileName = re.exec(api.url)[1];
         // console.log(fileName);
@@ -69,8 +72,8 @@ function handerSwagger(data, dir, prepend) {
     }
     for (var pre in pres) {
         var content = '';
-        for (var _a = 0, _b = pres[pre]; _a < _b.length; _a++) {
-            var a = _b[_a];
+        for (var _b = 0, _c = pres[pre]; _b < _c.length; _b++) {
+            var a = _c[_b];
             content = content.concat(buildApi(a, prepend));
         }
         fs.writeFileSync(dir + '/' + pre + '.js', fileHead + '' + content);
@@ -89,7 +92,7 @@ function buildApi(api, prepend) {
     var re = /\{([a-zA-Z]+)\}/g;
     var ar = api.url.match(re);
     // console.log(ar)
-    var str = "export function " + api.method + tempUrl + "(" + (!!ar ? array2String(ar) : '') + ((api.data === "1") ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + prepend + api.url + " " + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((api.data === "1") ? 'data' : '') + "})}";
+    var str = "export function " + api.method + tempUrl + "(" + (!!ar ? array2String(ar) : '') + ((api.data === "1") ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + prepend + api.url + " " + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((api.data === "1") ? 'data' : '') + "}).then(res => {\n\t\treturn res.data.data\n\t})}";
     return str;
 }
 function array2String(ar) {
