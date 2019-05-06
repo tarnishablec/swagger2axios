@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import axios from 'axios'
-import { prependListener } from 'cluster';
 
 interface StringMap {
   [k: string]: Array<any>
