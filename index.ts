@@ -11,7 +11,7 @@ const apis: Array<any> = [];
 // let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 
 const swaggerApis = [
-  { name: 'alarm', url: 'http://172.16.10.36:8080/alarm/v2/api-docs', prepend: '/api1' },
+  { name: 'texture', url: 'http://172.16.10.104:8008/v2/api-docs', prepend: '/api1' },
   { name: 'api2', url: '', prepend: '/api2' },
   { name: 'api3', url: '', prepend: '/api3' },
 ];
@@ -52,6 +52,7 @@ function handerSwagger(data, dir, prepend) {
     for (let m of ms) {
       let a: any = { url: u, method: m };
       if (paths[key][m].parameters !== undefined) {
+        a.params = new Array<String>()
         for (let param of paths[key][m].parameters) {
           console.log(param['in']);
           if (param['in'] === 'body') {
@@ -59,7 +60,6 @@ function handerSwagger(data, dir, prepend) {
           }
           if (param['in'] === 'query') {
             // console.log(param.name);
-            a.params = new Array<String>()
             a.params.push(param['name'])
           }
         }
@@ -67,7 +67,7 @@ function handerSwagger(data, dir, prepend) {
       apis.push(a);
     }
   }
-  // console.log(apis)
+  console.log(apis)
 
   const pres: StringMap = {};
   const fileHead = "import request from '@/plugins/axios'\n";
@@ -76,6 +76,7 @@ function handerSwagger(data, dir, prepend) {
   const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/
   for (let api of apis) {
     // console.log(api.url);
+    console.log(re.exec(api.url));
 
     let fileName = re.exec(api.url)[1];
     // console.log(fileName);
@@ -113,7 +114,7 @@ function buildApi(api: any, prepend) {
   let re = /\{([a-zA-Z]+)\}/g;
   let ar: Array<string> = api.url.match(re);
   // console.log(ar)
-  let paramStr = api.params? `params:{${array2String(api.params)}},`:''
+  let paramStr = api.params ? `params:{${array2String(api.params)}},` : ''
   let str = `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}${prepend}${api.url}${!!ar ? '\`' : '\''},method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
 		return res.data.data
 	})}`;

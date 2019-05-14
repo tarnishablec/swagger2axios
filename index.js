@@ -6,7 +6,7 @@ var apis = [];
 // let swaggerData;
 // let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 var swaggerApis = [
-    { name: 'alarm', url: 'http://172.16.10.36:8080/alarm/v2/api-docs', prepend: '/api1' },
+    { name: 'texture', url: 'http://172.16.10.104:8008/v2/api-docs', prepend: '/api1' },
     { name: 'api2', url: '', prepend: '/api2' },
     { name: 'api3', url: '', prepend: '/api3' },
 ];
@@ -43,6 +43,7 @@ function handerSwagger(data, dir, prepend) {
             var m = ms_1[_i];
             var a = { url: u, method: m };
             if (paths[key][m].parameters !== undefined) {
+                a.params = new Array();
                 for (var _a = 0, _b = paths[key][m].parameters; _a < _b.length; _a++) {
                     var param = _b[_a];
                     console.log(param['in']);
@@ -51,7 +52,6 @@ function handerSwagger(data, dir, prepend) {
                     }
                     if (param['in'] === 'query') {
                         // console.log(param.name);
-                        a.params = new Array();
                         a.params.push(param['name']);
                     }
                 }
@@ -59,13 +59,14 @@ function handerSwagger(data, dir, prepend) {
             apis.push(a);
         }
     }
-    // console.log(apis)
+    console.log(apis);
     var pres = {};
     var fileHead = "import request from '@/plugins/axios'\n";
     var re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
     for (var _c = 0, apis_1 = apis; _c < apis_1.length; _c++) {
         var api = apis_1[_c];
         // console.log(api.url);
+        console.log(re.exec(api.url));
         var fileName = re.exec(api.url)[1];
         // console.log(fileName);
         if (!Object.keys(pres).includes(fileName)) {
