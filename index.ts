@@ -115,7 +115,7 @@ function buildApi(api: any) {
 	// console.log(ar)
 	let paramStr = api.params ? `params:{${array2String(api.params)}},` : '';
 	return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}http://${api.host}${api.url}${!!ar ? '\`' : '\''},method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
-		return res.data.data
+		return res.data
 	})}`;
 }
 
