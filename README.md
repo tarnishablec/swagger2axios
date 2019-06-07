@@ -6,10 +6,11 @@ npm install
 ```
 安装依赖
 
-把swagger的网页上面的api地址(不是浏览器地址栏地址)填写到index.js的  
 ```javascript
+把swagger的网页上面的api地址(不是浏览器地址栏地址)填写到index.js的  
+
 swaggerApis 的 url，
-prepend 设置生成api的前缀
+
 name 设置生成api的文件夹名
 ```
 
