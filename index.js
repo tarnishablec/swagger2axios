@@ -6,9 +6,9 @@ var apis = [];
 // let swaggerData;
 // let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 var swaggerApis = [
-    { name: 'texture', url: 'http://172.16.10.104:8008/v2/api-docs', prepend: '/api1' },
-    { name: 'api2', url: '', prepend: '/api2' },
-    { name: 'api3', url: '', prepend: '/api3' },
+    { name: 'test', url: 'http://localhost:10010/a' },
+    { name: 'api2', url: '' },
+    { name: 'api3', url: '' },
 ];
 // let file = fs.readFileSync("v1.json", "utf8");
 run();
@@ -22,7 +22,7 @@ function run() {
             fs.mkdirSync(dir);
         }
         axios_1["default"].get(swaggerApi.url).then(function (res) {
-            handerSwagger(res.data, dir, swaggerApi.prepend);
+            handleSwagger(res.data, dir);
         });
     };
     for (var _i = 0, swaggerApis_1 = swaggerApis; _i < swaggerApis_1.length; _i++) {
@@ -32,8 +32,9 @@ function run() {
             break;
     }
 }
-function handerSwagger(data, dir, prepend) {
+function handleSwagger(data, dir) {
     // console.log(data);
+    var host = data.host + data.basePath;
     var paths = data.paths;
     // console.log(paths)
     for (var key in paths) {
@@ -41,7 +42,7 @@ function handerSwagger(data, dir, prepend) {
         var ms = Object.keys(paths[key]);
         for (var _i = 0, ms_1 = ms; _i < ms_1.length; _i++) {
             var m = ms_1[_i];
-            var a = { url: u, method: m };
+            var a = { url: u, method: m, host: host };
             if (paths[key][m].parameters !== undefined) {
                 a.params = new Array();
                 for (var _a = 0, _b = paths[key][m].parameters; _a < _b.length; _a++) {
@@ -78,27 +79,26 @@ function handerSwagger(data, dir, prepend) {
         var content = '';
         for (var _d = 0, _e = pres[pre]; _d < _e.length; _d++) {
             var a = _e[_d];
-            content = content.concat(buildApi(a, prepend));
+            content = content.concat(buildApi(a));
         }
         fs.writeFileSync(dir + '/' + pre + '.js', fileHead + '' + content);
     }
 }
 // console.log(pres)
 // const re1 = /\$/
-function buildApi(api, prepend) {
+function buildApi(api) {
     // console.log(api.url)
     var tempUrl = api.url.replace(/\$/g, 'By');
     // let reg = /\/(\w)/;
     // tempUrl= tempUrl.replace(reg, ($1:string) => {
     //     return $1.toUpperCase();
     // });
-    tempUrl = paramUppercase(slash2Camel(tempUrl)).replace(/((\/|\{)|\})/g, '');
-    var re = /\{([a-zA-Z]+)\}/g;
+    tempUrl = paramUppercase(slash2Camel(tempUrl)).replace(/(([\/{])|})/g, '');
+    var re = /{([a-zA-Z]+)}/g;
     var ar = api.url.match(re);
     // console.log(ar)
     var paramStr = api.params ? "params:{" + array2String(api.params) + "}," : '';
-    var str = "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + prepend + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data.data\n\t})}";
-    return str;
+    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + api.host + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data.data\n\t})}";
 }
 function array2String(ar) {
     var str = '';
@@ -106,7 +106,7 @@ function array2String(ar) {
         var i = ar_1[_i];
         str = str.concat(i + ",");
     }
-    return str.replace(/(\{|\})/g, '');
+    return str.replace(/([{}])/g, '');
 }
 function slash2Camel(str) {
     var arr = str.split('/');
