@@ -16,6 +16,10 @@ put your swagger api address in 'url' field
 run
 ```
 node index.js  
+```
+
+done
+```
 find your file in target folder
 ```
 
