@@ -9,7 +9,10 @@
   "author": "tarnishablec",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^11.13.8",
-    "axios": "^0.19.0"
+    "@types/node": "^11.13.8"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "yaml": "^1.6.0"
   }
 }

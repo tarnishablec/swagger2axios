@@ -2,15 +2,11 @@
 exports.__esModule = true;
 var fs = require("fs");
 var axios_1 = require("axios");
+var YAML = require("yaml");
 var apis = [];
 // let swaggerData;
 // let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
-var swaggerApis = [
-    { name: 'test', url: 'http://localhost:10010/a' },
-    { name: 'api2', url: '' },
-    { name: 'api3', url: '' },
-];
-// let file = fs.readFileSync("v1.json", "utf8");
+var swaggerApis = YAML.parse(fs.readFileSync('./bootstrap.yml', 'utf8')).apis;
 run();
 function run() {
     var _loop_1 = function (swaggerApi) {
@@ -98,7 +94,7 @@ function buildApi(api) {
     var ar = api.url.match(re);
     // console.log(ar)
     var paramStr = api.params ? "params:{" + array2String(api.params) + "}," : '';
-    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + api.host + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data.data\n\t})}";
+    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + api.host + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data\n\t})}";
 }
 function array2String(ar) {
     var str = '';
