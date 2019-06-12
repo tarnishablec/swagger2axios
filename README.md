@@ -1,24 +1,24 @@
 # swagger2axios
 
-运行
+install dependencies
 ```
 npm install
 ```
-安装依赖
 
-```javascript
-把swagger的网页上面的api地址(不是浏览器地址栏地址)填写到index.js的  
+configuration
+```yaml
+edit bootstrap.yml file
 
-swaggerApis 的 url，
-
-name 设置生成api的文件夹名
+put your swagger api address in 'url' field
+'name' field is the name of the folder where your code will be generated
 ```
 
-运行
+run
 ```
 node index.js  
 ```
-生成axios实例接口到target目录  
+
+have fun!
 
 
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
