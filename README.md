@@ -9,8 +9,9 @@ configuration
 ```yaml
 edit bootstrap.yml file
 
-put your swagger api address in 'url' field
-'name' field is the name of the folder where your code will be generated
+put your swagger api address in 'url' field (required)
+'name' field is the name of the folder where your code will be generated (required)
+add 'prepend' field if you want to replace your host to a specific prepend (not required)
 ```
 
 run
