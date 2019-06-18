@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getArtists(ids,){return request({url: 'http://api.spotify.com/v1/artists',method:'get',params:{ids,},}).then(res => {
+export function getArtists(ids,){return request({url: `http://api.spotify.com/v1/artists`,method:'get',params:{ids,},}).then(res => {
 		return res.data
 	})}export function getArtistsById(id,){return request({url: `http://api.spotify.com/v1/artists/${id}`,method:'get',params:{},}).then(res => {
 		return res.data

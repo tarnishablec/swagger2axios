@@ -84,7 +84,7 @@ function buildApi(api: any) {
 	let ar: Array<string> = api.url.match(re);
 	// console.log(ar)
 	let paramStr = api.params ? `params:{${array2String(api.params)}},` : '';
-	return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}http://${api.prepend ? api.prepend : api.host}${api.url}${!!ar ? '\`' : '\''},method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
+	return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
 		return res.data
 	})}`;
 }
@@ -102,21 +102,34 @@ function cleanString(str: string) {
 	let arr2 = str.split(/\//).reverse();
 	let prep = [];
 	let num = checkVars(arr2);
+	let count = 3;
 	if (num > 0) {
-		for (let i = 0; i < num; i++) {
-			prep.push(arr.pop());
-		}
-		prep.reverse();
-		prep = prep.concat('From');
-
-		arr.splice(0, 0, ...prep);
+		count = num;
 	}
 
+	arr = arr.filter(res => res !== '');
+
+	console.log(arr);
+
+	for (let i = 0; i < count; i++) {
+		prep.push(arr.pop());
+	}
+
+
+	prep.reverse();
+	prep = prep.concat('From');
+
+	arr.splice(0, 0, ...prep);
+
+	// if (arr[arr.length - 1] === 'By') {
+	// 	arr.pop();
+	// }
 
 	for (let i = 0; i < arr.length; i++) {
-		arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
+		if (arr[i])
+			arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
 	}
-	return arr.join('');
+	return arr.join('').replace(/From$/, '');
 }
 
 function checkVars(arr: Array<string>) {

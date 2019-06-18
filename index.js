@@ -81,7 +81,7 @@ function buildApi(api) {
     var ar = api.url.match(re);
     // console.log(ar)
     var paramStr = api.params ? "params:{" + array2String(api.params) + "}," : '';
-    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + (api.prepend ? api.prepend : api.host) + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data\n\t})}";
+    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: `http://" + (api.prepend ? api.prepend : api.host) + api.url + "`,method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data\n\t})}";
 }
 function array2String(ar) {
     var str = '';
@@ -96,18 +96,26 @@ function cleanString(str) {
     var arr2 = str.split(/\//).reverse();
     var prep = [];
     var num = checkVars(arr2);
+    var count = 3;
     if (num > 0) {
-        for (var i = 0; i < num; i++) {
-            prep.push(arr.pop());
-        }
-        prep.reverse();
-        prep = prep.concat('From');
-        arr.splice.apply(arr, [0, 0].concat(prep));
+        count = num;
     }
+    arr = arr.filter(function (res) { return res !== ''; });
+    console.log(arr);
+    for (var i = 0; i < count; i++) {
+        prep.push(arr.pop());
+    }
+    prep.reverse();
+    prep = prep.concat('From');
+    arr.splice.apply(arr, [0, 0].concat(prep));
+    // if (arr[arr.length - 1] === 'By') {
+    // 	arr.pop();
+    // }
     for (var i = 0; i < arr.length; i++) {
-        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
+        if (arr[i])
+            arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
     }
-    return arr.join('');
+    return arr.join('').replace(/From$/, '');
 }
 function checkVars(arr) {
     for (var i = 0; i < arr.length; i++) {

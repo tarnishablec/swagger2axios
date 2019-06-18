@@ -2,13 +2,13 @@ import request from '@/plugins/axios'
 
 //host:petstore.swagger.io/v2
 
-export function postPet(data){return request({url: 'http://api1/pet',method:'post',data,params:{},}).then(res => {
+export function postPet(data){return request({url: `http://api1/pet`,method:'post',data,params:{},}).then(res => {
 		return res.data
-	})}export function putPet(data){return request({url: 'http://api1/pet',method:'put',data,params:{},}).then(res => {
+	})}export function putPet(data){return request({url: `http://api1/pet`,method:'put',data,params:{},}).then(res => {
 		return res.data
-	})}export function getPetFindByStatus(status,){return request({url: 'http://api1/pet/findByStatus',method:'get',params:{status,},}).then(res => {
+	})}export function getPetFindByStatus(status,){return request({url: `http://api1/pet/findByStatus`,method:'get',params:{status,},}).then(res => {
 		return res.data
-	})}export function getPetFindByTags(tags,){return request({url: 'http://api1/pet/findByTags',method:'get',params:{tags,},}).then(res => {
+	})}export function getPetFindByTags(tags,){return request({url: `http://api1/pet/findByTags`,method:'get',params:{tags,},}).then(res => {
 		return res.data
 	})}export function getPetByPetId(petId,){return request({url: `http://api1/pet/${petId}`,method:'get',params:{},}).then(res => {
 		return res.data
