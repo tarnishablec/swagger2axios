@@ -4,8 +4,6 @@ var fs = require("fs");
 var axios_1 = require("axios");
 var YAML = require("yaml");
 var apis = [];
-// let swaggerData;
-// let swaggerUrl = 'http://172.16.10.25:8080/alarm/v2/api-docs';
 var swaggerApis = YAML.parse(fs.readFileSync('./bootstrap.yml', 'utf8')).apis;
 run();
 function run() {
@@ -18,7 +16,7 @@ function run() {
             fs.mkdirSync(dir);
         }
         axios_1["default"].get(swaggerApi.url).then(function (res) {
-            handleSwagger(res.data, dir);
+            handleSwagger(res.data, dir, swaggerApi.prepend);
         });
     };
     for (var _i = 0, swaggerApis_1 = swaggerApis; _i < swaggerApis_1.length; _i++) {
@@ -28,7 +26,7 @@ function run() {
             break;
     }
 }
-function handleSwagger(data, dir) {
+function handleSwagger(data, dir, prepend) {
     // console.log(data);
     var host = data.host + data.basePath;
     var paths = data.paths;
@@ -38,7 +36,7 @@ function handleSwagger(data, dir) {
         var ms = Object.keys(paths[key]);
         for (var _i = 0, ms_1 = ms; _i < ms_1.length; _i++) {
             var m = ms_1[_i];
-            var a = { url: u, method: m, host: host };
+            var a = { url: u, method: m, host: host, prepend: prepend };
             if (paths[key][m].parameters !== undefined) {
                 a.params = new Array();
                 for (var _a = 0, _b = paths[key][m].parameters; _a < _b.length; _a++) {
@@ -58,7 +56,7 @@ function handleSwagger(data, dir) {
     }
     console.log(apis);
     var pres = {};
-    var fileHead = "import request from '@/plugins/axios'\n";
+    var fileHead = "import request from '@/plugins/axios'\n//host:" + host + "\n";
     var re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
     for (var _c = 0, apis_1 = apis; _c < apis_1.length; _c++) {
         var api = apis_1[_c];
@@ -94,7 +92,7 @@ function buildApi(api) {
     var ar = api.url.match(re);
     // console.log(ar)
     var paramStr = api.params ? "params:{" + array2String(api.params) + "}," : '';
-    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + api.host + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data\n\t})}";
+    return "export function " + api.method + tempUrl + "(" + ((!!api.params) ? array2String(api.params) : '') + (!!ar ? array2String(ar) : '') + ((!!api.data) ? 'data' : '') + "){return request({url: " + (!!ar ? '\`' : '\'') + "http://" + api.prepend + api.url + (!!ar ? '\`' : '\'') + ",method:'" + api.method + "'," + ((!!api.data) ? 'data,' : '') + paramStr + "}).then(res => {\n\t\treturn res.data\n\t})}";
 }
 function array2String(ar) {
     var str = '';

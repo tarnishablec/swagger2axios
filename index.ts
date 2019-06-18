@@ -25,14 +25,15 @@ function run() {
             fs.mkdirSync(dir);
         }
 
+
         axios.get(swaggerApi.url).then(res => {
-            handleSwagger(res.data, dir,);
+            handleSwagger(res.data, dir, swaggerApi.prepend);
         })
     }
 }
 
 
-function handleSwagger(data, dir) {
+function handleSwagger(data, dir, prepend) {
     // console.log(data);
     let host = data.host + data.basePath;
     let paths = data.paths;
@@ -42,7 +43,7 @@ function handleSwagger(data, dir) {
         let u = key.toString().replace(/{/g, '${');
         let ms = Object.keys(paths[key]);
         for (let m of ms) {
-            let a: any = {url: u, method: m, host: host};
+            let a: any = {url: u, method: m, host: host, prepend: prepend};
             if (paths[key][m].parameters !== undefined) {
                 a.params = new Array<String>();
                 for (let param of paths[key][m].parameters) {
@@ -62,7 +63,7 @@ function handleSwagger(data, dir) {
     console.log(apis);
 
     const pres: StringMap = {};
-    const fileHead = "import request from '@/plugins/axios'\n";
+    const fileHead = `import request from '@/plugins/axios'\n//host:${host}\n`;
 
 
     const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
@@ -107,7 +108,7 @@ function buildApi(api: any) {
     let ar: Array<string> = api.url.match(re);
     // console.log(ar)
     let paramStr = api.params ? `params:{${array2String(api.params)}},` : '';
-    return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}http://${api.host}${api.url}${!!ar ? '\`' : '\''},method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
+    return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: ${!!ar ? '\`' : '\''}http://${api.prepend}${api.url}${!!ar ? '\`' : '\''},method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
 		return res.data
 	})}`;
 }

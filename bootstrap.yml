@@ -1,5 +1,6 @@
 apis:
   -
     url: https://petstore.swagger.io/v2/swagger.json
-    name: Petstore
+    name: pet
+    prepend: api1
 
