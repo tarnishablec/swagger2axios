@@ -18,6 +18,11 @@ run
 node index.js  
 ```
 
+done
+```
+find your file in target folder
+```
+
 have fun!
 
 
