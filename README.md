@@ -15,7 +15,7 @@ put your swagger api address in 'url' field
 
 run
 ```
-node index.js  
+node indexold.js  
 ```
 
 done

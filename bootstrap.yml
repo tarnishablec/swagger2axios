@@ -3,4 +3,7 @@ apis:
     url: https://petstore.swagger.io/v2/swagger.json
     name: pet
     prepend: api1
+  -
+    url: https://any-api.com/openapi/spotify_com.v1.openapi.json
+    name: spotify
 
