@@ -31,17 +31,17 @@ function handleSwagger(data, dir, name, prepend) {
 		let ms = Object.keys(paths[key]);
 		for (let m of ms) {
 			let a: any = {url: u, method: m, host: host, prepend: prepend};
-			if (paths[key][m].parameters !== undefined) {
-				a.params = new Array<String>();
-				for (let param of paths[key][m].parameters) {
-					// console.log(param['in']);
-					if (param['in'] === 'body') {
-						a.data = '1'
+			let parameters = paths[key][m].parameters;
+			if (parameters) {
+				a.params = new Map<string, string>();
+				for (let param of parameters) {
+					if (param.in === 'body') {
+						a.hasBody = true;
 					}
-					if (param['in'] === 'query') {
-						// console.log(param.name);
-						a.params.push(param['name'])
+					if (param.in === 'query') {
+						a.hasParams = true;
 					}
+					a.params.set(param.name, param.in);
 				}
 			}
 			apis.push(a);
@@ -83,8 +83,8 @@ function buildApi(api: any) {
 	let re = /{([a-zA-Z]+)}/g;
 	let ar: Array<string> = api.url.match(re);
 	// console.log(ar)
-	let paramStr = api.params ? `params:{${array2String(api.params)}},` : '';
-	return `export function ${api.method}${tempUrl}(${(!!api.params) ? array2String(api.params) : ''}${!!ar ? array2String(ar) : ''}${(!!api.data) ? 'data' : ''}){return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',${(!!api.data) ? 'data,' : ''}${paramStr}}).then(res => {
+	console.log(api.params);
+	return `export function ${api.method}${tempUrl}(${array2String(api.params)}){return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',data,}).then(res => {
 		return res.data
 	})}`;
 }

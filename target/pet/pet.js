@@ -2,20 +2,20 @@ import request from '@/plugins/axios'
 
 //host:petstore.swagger.io/v2
 
-export function postPet(data){return request({url: `http://api1/pet`,method:'post',data,params:{},}).then(res => {
+export function postPet(){return request({url: `http://api1/pet`,method:'post',data,}).then(res => {
 		return res.data
-	})}export function putPet(data){return request({url: `http://api1/pet`,method:'put',data,params:{},}).then(res => {
+	})}export function putPet(){return request({url: `http://api1/pet`,method:'put',data,}).then(res => {
 		return res.data
-	})}export function getPetFindByStatus(status,){return request({url: `http://api1/pet/findByStatus`,method:'get',params:{status,},}).then(res => {
+	})}export function getPetFindByStatus(){return request({url: `http://api1/pet/findByStatus`,method:'get',data,}).then(res => {
 		return res.data
-	})}export function getPetFindByTags(tags,){return request({url: `http://api1/pet/findByTags`,method:'get',params:{tags,},}).then(res => {
+	})}export function getPetFindByTags(){return request({url: `http://api1/pet/findByTags`,method:'get',data,}).then(res => {
 		return res.data
-	})}export function getPetByPetId(petId,){return request({url: `http://api1/pet/${petId}`,method:'get',params:{},}).then(res => {
+	})}export function getPetByPetId(){return request({url: `http://api1/pet/${petId}`,method:'get',data,}).then(res => {
 		return res.data
-	})}export function postPetByPetId(petId,){return request({url: `http://api1/pet/${petId}`,method:'post',params:{},}).then(res => {
+	})}export function postPetByPetId(){return request({url: `http://api1/pet/${petId}`,method:'post',data,}).then(res => {
 		return res.data
-	})}export function deletePetByPetId(petId,){return request({url: `http://api1/pet/${petId}`,method:'delete',params:{},}).then(res => {
+	})}export function deletePetByPetId(){return request({url: `http://api1/pet/${petId}`,method:'delete',data,}).then(res => {
 		return res.data
-	})}export function postUploadImageFromPetByPetId(petId,){return request({url: `http://api1/pet/${petId}/uploadImage`,method:'post',params:{},}).then(res => {
+	})}export function postUploadImageFromPetByPetId(){return request({url: `http://api1/pet/${petId}/uploadImage`,method:'post',data,}).then(res => {
 		return res.data
 	})}
