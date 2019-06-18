@@ -91,6 +91,9 @@ function buildApi(api: any) {
 
 function array2String(ar: Array<String>) {
 	let str = '';
+	if (!ar) {
+		return '';
+	}
 	for (let i of ar) {
 		str = str.concat(i + ",");
 	}
