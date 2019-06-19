@@ -29,6 +29,7 @@ function handleSwagger(data, dir, name, prepend) {
     var host = data.host + ((data.basePath === '/') ? '' : data.basePath);
     var paths = data.paths;
     var publicParams = data.parameter;
+    var scheme = data.schemes ? data.schemes[0] : 'http';
     var apis = [];
     for (var key in paths) {
         var u = key.toString().replace(/{/g, '${');
@@ -40,7 +41,17 @@ function handleSwagger(data, dir, name, prepend) {
         });
         for (var _i = 0, ms_1 = ms; _i < ms_1.length; _i++) {
             var m = ms_1[_i];
-            var a = { url: u, method: m, host: host, prepend: prepend, needs: {}, query: [], path: [], body: [] };
+            var a = {
+                url: u,
+                method: m,
+                host: host,
+                prepend: prepend,
+                needs: {},
+                query: [],
+                path: [],
+                body: [],
+                scheme: scheme
+            };
             var parameters = paths[key][m].parameters;
             if (parameters) {
                 for (var _a = 0, parameters_1 = parameters; _a < parameters_1.length; _a++) {
@@ -95,7 +106,7 @@ function buildApi(api) {
     tempUrl = array2String(url2Array(tempUrl)).replace(/[^A-Za-z]/g, '');
     var hasQuery = api.query.length > 0;
     var hasBody = api.body.length > 0;
-    return "export function " + api.method + tempUrl + "(" + array2String(api.path) + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "){\n return request({url: `http://" + (api.prepend ? api.prepend : api.host) + api.url + "`,method:'" + api.method + "'," + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "}).then(res => {\n\t\treturn res.data\n\t})}\n";
+    return "export function " + api.method + tempUrl + "(" + array2String(api.path) + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "){\n return request({url: `" + (api.prepend ? api.prepend : api.scheme + '://' + api.host) + api.url + "`,method:'" + api.method + "'," + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "}).then(res => {\n\t\treturn res.data\n\t})}\n";
 }
 function array2String(ar) {
     var str = '';
@@ -131,7 +142,7 @@ function url2Array(str) {
     }
     arr.splice(0, 0, 'From');
     arr.splice.apply(arr, [0, 0].concat(arrr.reverse()));
-    console.log(arr);
+    // console.log(arr);
     if (arr[arr.length - 1] === 'From') {
         arr.pop();
     }

@@ -25,6 +25,7 @@ function handleSwagger(data, dir, name, prepend) {
 	let host = data.host + ((data.basePath === '/') ? '' : data.basePath);
 	let paths = data.paths;
 	let publicParams = data.parameter;
+	let scheme = data.schemes ? data.schemes[0] : 'http';
 	let apis = [];
 
 	for (let key in paths) {
@@ -36,7 +37,17 @@ function handleSwagger(data, dir, name, prepend) {
 			return el !== 'parameters';
 		});
 		for (let m of ms) {
-			let a = {url: u, method: m, host: host, prepend: prepend, needs: {}, query: [], path: [], body: []};
+			let a = {
+				url: u,
+				method: m,
+				host: host,
+				prepend: prepend,
+				needs: {},
+				query: [],
+				path: [],
+				body: [],
+				scheme: scheme
+			};
 			let parameters = paths[key][m].parameters;
 			if (parameters) {
 				for (let p of parameters) {
@@ -96,7 +107,7 @@ function buildApi(api) {
 	tempUrl = array2String(url2Array(tempUrl)).replace(/[^A-Za-z]/g, '');
 	let hasQuery = api.query.length > 0;
 	let hasBody = api.body.length > 0;
-	return `export function ${api.method}${tempUrl}(${array2String(api.path)}${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}){\n return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}}).then(res => {
+	return `export function ${api.method}${tempUrl}(${array2String(api.path)}${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}){\n return request({url: \`${api.prepend ? api.prepend : api.scheme + '://' + api.host}${api.url}\`,method:'${api.method}',${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}}).then(res => {
 		return res.data
 	})}\n`;
 }
@@ -135,7 +146,7 @@ function url2Array(str: string) {
 	}
 	arr.splice(0, 0, 'From');
 	arr.splice(0, 0, ...arrr.reverse());
-	console.log(arr);
+	// console.log(arr);
 	if (arr[arr.length - 1] === 'From') {
 		arr.pop();
 	}

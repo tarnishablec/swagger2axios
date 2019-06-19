@@ -1,14 +1,14 @@
 apis:
-  -
-    url: https://any-api.com/openapi/nytimes_com_books_api.3_0_0.openapi.json
+  - url: https://any-api.com/openapi/nytimes_com_books_api.3_0_0.openapi.json
     name: book
     prepend: api1
-  -
-    url: https://any-api.com/openapi/spotify_com.v1.openapi.json
+  - url: https://any-api.com/openapi/spotify_com.v1.openapi.json
     name: spotify
-  -
-    url: https://any-api.com/openapi/instagram_com.1_0_0.openapi.json
+  - url: https://any-api.com/openapi/instagram_com.1_0_0.openapi.json
     name: instagram
-  -
-    url: https://any-api.com/openapi/github_com.v3.openapi.json
+  - url: https://any-api.com/openapi/github_com.v3.openapi.json
     name: github
+  - url: http://172.16.10.20:8008/v2/api-docs
+    name: process
+    prepend: process
+
