@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getBrowseCategories(params,){
+export function getCategoriesFromBrowse(params,){
  return request({url: `http://api.spotify.com/v1/browse/categories`,method:'get',params,}).then(res => {
 		return res.data
 	})}
@@ -14,11 +14,11 @@ export function getPlaylistsFromBrowseCategoriesByCategoryid(category_id,params,
  return request({url: `http://api.spotify.com/v1/browse/categories/${category_id}/playlists`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getBrowseFeaturedPlaylists(params,){
+export function getFeaturedPlaylistsFromBrowse(params,){
  return request({url: `http://api.spotify.com/v1/browse/featured-playlists`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getBrowseNewReleases(params,){
+export function getNewReleasesFromBrowse(params,){
  return request({url: `http://api.spotify.com/v1/browse/new-releases`,method:'get',params,}).then(res => {
 		return res.data
 	})}

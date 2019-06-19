@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getStateByKeywordFromLegacyIssuesSearchByOwnerByRepositoryBy(keyword,state,owner,repository,){
+export function getSearchByOwnerByRepositoryByStateByKeywordFromLegacyIssues(keyword,state,owner,repository,){
  return request({url: `http://api.github.com/legacy/issues/search/${owner}/${repository}/${state}/${keyword}`,method:'get',}).then(res => {
 		return res.data
 	})}

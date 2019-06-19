@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getUsers(params,){
+export function getUsersFrom(params,){
  return request({url: `http://api.github.com/users`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getUsersByUsername(username,){
+export function getUsersByUsernameFrom(username,){
  return request({url: `http://api.github.com/users/${username}`,method:'get',}).then(res => {
 		return res.data
 	})}
@@ -42,7 +42,7 @@ export function getReceivedeventsFromUsersByUsername(username,){
  return request({url: `http://api.github.com/users/${username}/received_events`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getReceivedeventsPublicFromUsersByUsername(username,){
+export function getPublicFromUsersByUsernameReceivedevents(username,){
  return request({url: `http://api.github.com/users/${username}/received_events/public`,method:'get',}).then(res => {
 		return res.data
 	})}

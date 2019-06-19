@@ -2,39 +2,39 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getMe(){
+export function getMeFrom(){
  return request({url: `http://api.spotify.com/v1/me`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function deleteMeFollowing(params,){
+export function deleteFollowingFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/following`,method:'delete',params,}).then(res => {
 		return res.data
 	})}
-export function getMeFollowing(params,){
+export function getFollowingFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/following`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function putMeFollowing(params,){
+export function putFollowingFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/following`,method:'put',params,}).then(res => {
 		return res.data
 	})}
-export function getMeFollowingContains(params,){
+export function getContainsFromMeFollowing(params,){
  return request({url: `http://api.spotify.com/v1/me/following/contains`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function deleteMeTracks(params,){
+export function deleteTracksFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/tracks`,method:'delete',params,}).then(res => {
 		return res.data
 	})}
-export function getMeTracks(params,){
+export function getTracksFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/tracks`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function putMeTracks(params,){
+export function putTracksFromMe(params,){
  return request({url: `http://api.spotify.com/v1/me/tracks`,method:'put',params,}).then(res => {
 		return res.data
 	})}
-export function getMeTracksContains(params,){
+export function getContainsFromMeTracks(params,){
  return request({url: `http://api.spotify.com/v1/me/tracks/contains`,method:'get',params,}).then(res => {
 		return res.data
 	})}

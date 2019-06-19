@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getTracks(params,){
+export function getTracksFrom(params,){
  return request({url: `http://api.spotify.com/v1/tracks`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getTracksById(id,params,){
+export function getTracksByIdFrom(id,params,){
  return request({url: `http://api.spotify.com/v1/tracks/${id}`,method:'get',params,}).then(res => {
 		return res.data
 	})}

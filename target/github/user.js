@@ -2,31 +2,31 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getUser(){
+export function getUserFrom(){
  return request({url: `http://api.github.com/user`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchUser(data,){
+export function patchUserFrom(data,){
  return request({url: `http://api.github.com/user`,method:'patch',data,}).then(res => {
 		return res.data
 	})}
-export function deleteUserEmails(data,){
+export function deleteEmailsFromUser(data,){
  return request({url: `http://api.github.com/user/emails`,method:'delete',data,}).then(res => {
 		return res.data
 	})}
-export function getUserEmails(){
+export function getEmailsFromUser(){
  return request({url: `http://api.github.com/user/emails`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function postUserEmails(data,){
+export function postEmailsFromUser(data,){
  return request({url: `http://api.github.com/user/emails`,method:'post',data,}).then(res => {
 		return res.data
 	})}
-export function getUserFollowers(){
+export function getFollowersFromUser(){
  return request({url: `http://api.github.com/user/followers`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getUserFollowing(){
+export function getFollowingFromUser(){
  return request({url: `http://api.github.com/user/following`,method:'get',}).then(res => {
 		return res.data
 	})}
@@ -42,15 +42,15 @@ export function putFollowingByUsernameFromUser(username,){
  return request({url: `http://api.github.com/user/following/${username}`,method:'put',}).then(res => {
 		return res.data
 	})}
-export function getUserIssues(params,){
+export function getIssuesFromUser(params,){
  return request({url: `http://api.github.com/user/issues`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getUserKeys(){
+export function getKeysFromUser(){
  return request({url: `http://api.github.com/user/keys`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function postUserKeys(data,){
+export function postKeysFromUser(data,){
  return request({url: `http://api.github.com/user/keys`,method:'post',data,}).then(res => {
 		return res.data
 	})}
@@ -62,51 +62,51 @@ export function getKeysByKeyIdFromUser(keyId,){
  return request({url: `http://api.github.com/user/keys/${keyId}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getUserOrgs(){
+export function getOrgsFromUser(){
  return request({url: `http://api.github.com/user/orgs`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getUserRepos(params,){
+export function getReposFromUser(params,){
  return request({url: `http://api.github.com/user/repos`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function postUserRepos(data,){
+export function postReposFromUser(data,){
  return request({url: `http://api.github.com/user/repos`,method:'post',data,}).then(res => {
 		return res.data
 	})}
-export function getUserStarred(params,){
+export function getStarredFromUser(params,){
  return request({url: `http://api.github.com/user/starred`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function deleteOwnerByRepoFromUserStarredBy(owner,repo,){
+export function deleteStarredByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/starred/${owner}/${repo}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getOwnerByRepoFromUserStarredBy(owner,repo,){
+export function getStarredByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/starred/${owner}/${repo}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function putOwnerByRepoFromUserStarredBy(owner,repo,){
+export function putStarredByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/starred/${owner}/${repo}`,method:'put',}).then(res => {
 		return res.data
 	})}
-export function getUserSubscriptions(){
+export function getSubscriptionsFromUser(){
  return request({url: `http://api.github.com/user/subscriptions`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function deleteOwnerByRepoFromUserSubscriptionsBy(owner,repo,){
+export function deleteSubscriptionsByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/subscriptions/${owner}/${repo}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getOwnerByRepoFromUserSubscriptionsBy(owner,repo,){
+export function getSubscriptionsByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/subscriptions/${owner}/${repo}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function putOwnerByRepoFromUserSubscriptionsBy(owner,repo,){
+export function putSubscriptionsByOwnerByRepoFromUser(owner,repo,){
  return request({url: `http://api.github.com/user/subscriptions/${owner}/${repo}`,method:'put',}).then(res => {
 		return res.data
 	})}
-export function getUserTeams(){
+export function getTeamsFromUser(){
  return request({url: `http://api.github.com/user/teams`,method:'get',}).then(res => {
 		return res.data
 	})}

@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.instagram.com/v1
 
-export function getMediaPopular(){
+export function getPopularFromMedia(){
  return request({url: `http://api.instagram.com/v1/media/popular`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getMediaSearch(params,){
+export function getSearchFromMedia(params,){
  return request({url: `http://api.instagram.com/v1/media/search`,method:'get',params,}).then(res => {
 		return res.data
 	})}
@@ -14,7 +14,7 @@ export function getShortcodeByShortcodeFromMedia(shortcode,){
  return request({url: `http://api.instagram.com/v1/media/shortcode/${shortcode}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getMediaByMediaid(media_id,){
+export function getMediaByMediaidFrom(media_id,){
  return request({url: `http://api.instagram.com/v1/media/${media_id}`,method:'get',}).then(res => {
 		return res.data
 	})}

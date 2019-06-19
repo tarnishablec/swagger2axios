@@ -30,6 +30,7 @@ function handleSwagger(data, dir, name, prepend) {
 	for (let key in paths) {
 		let u = key.toString().replace(/{/g, '${');
 		u = u.replace(/\${(\w*)-(\w*)}?/g, '${$1_$2}');
+		let pathps = paths[key].parameters;
 		let ms = Object.keys(paths[key]);
 		ms = ms.filter(el => {
 			return el !== 'parameters';
@@ -50,10 +51,15 @@ function handleSwagger(data, dir, name, prepend) {
 					}
 				}
 			}
+			if (pathps) {
+				for (let pathp of pathps) {
+					a.needs[pathp.name] = pathp.in;
+				}
+			}
 			for (let need in a.needs) {
 				a[a.needs[need]].push(need);
 			}
-			console.log(a);
+			// console.log(a);
 			apis.push(a);
 		}
 	}
@@ -87,7 +93,7 @@ function handleSwagger(data, dir, name, prepend) {
 function buildApi(api) {
 	let tempUrl = api.url.replace(/\$/g, 'By');
 
-	tempUrl = cleanString(tempUrl).replace(/(([\/{])|})/g, '');
+	tempUrl = array2String(url2Array(tempUrl)).replace(/[^A-Za-z]/g, '');
 	let hasQuery = api.query.length > 0;
 	let hasBody = api.body.length > 0;
 	return `export function ${api.method}${tempUrl}(${array2String(api.path)}${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}){\n return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}}).then(res => {
@@ -106,43 +112,37 @@ function array2String(ar: Array<String>) {
 	return str.replace(/([{}])/g, '');
 }
 
-function cleanString(str: string) {
-	let arr = str.split(/\W/);
-	let arr2 = str.split(/\//).reverse();
-	let prep = [];
-	let num = checkVars(arr2);
-	let count = 3;
-	if (num > 0) {
-		count = num;
+function url2Array(str: string) {
+	// console.log(str);
+	let arr: Array<string> = str.split(/\//);
+	arr = arr
+		.filter(res => res !== '')
+		.map(a => {
+			return a.replace(/By{([a-z]?)/, (word, res1: string) => {
+				return 'By{' + res1.toUpperCase();
+			}).replace(/\.json/, '')
+				.replace(/\./g, '')
+				.replace(/\b([a-z]?)/g, (word, res: string) => {
+					return res.toUpperCase();
+				})
+		});
+	// console.log(arr);
+	let arr2 = [...arr].reverse();
+	let n = checkVars(arr2);
+	let arrr = [];
+	for (let i = 0; i < n; i++) {
+		arrr.push(arr.pop());
 	}
-
-	arr = arr.filter(res => res !== '');
-
-	for (let i = 0; i < count; i++) {
-		prep.push(arr.pop());
-	}
-
-
-	prep.reverse();
-	prep = prep.concat('From');
-
-	arr.splice(0, 0, ...prep);
-
-	// if (arr[arr.length - 1] === 'By') {
-	// 	arr.pop();
-	// }
-
-	for (let i = 0; i < arr.length; i++) {
-		if (arr[i])
-			arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
-	}
-	return arr.join('').replace(/From$/, '');
+	arr.splice(0, 0, 'From');
+	arr.splice(0, 0, ...arrr.reverse());
+	console.log(arr);
+	return arr;
 }
 
 function checkVars(arr: Array<string>) {
 	for (let i = 0; i < arr.length; i++) {
-		if (arr[i].match(/{/)) {
-			return i;
+		if (!arr[i].match(/^By{/)) {
+			return i + 1;
 		}
 	}
 }

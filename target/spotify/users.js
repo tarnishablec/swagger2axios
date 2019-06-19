@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getUsersByUserid(user_id,){
+export function getUsersByUseridFrom(user_id,){
  return request({url: `http://api.spotify.com/v1/users/${user_id}`,method:'get',}).then(res => {
 		return res.data
 	})}
@@ -30,7 +30,7 @@ export function putFollowersFromUsersByUseridPlaylistsByPlaylistid(user_id,playl
  return request({url: `http://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/followers`,method:'put',data,}).then(res => {
 		return res.data
 	})}
-export function getFollowersContainsFromUsersByUseridPlaylistsByPlaylistid(user_id,playlist_id,params,){
+export function getContainsFromUsersByUseridPlaylistsByPlaylistidFollowers(user_id,playlist_id,params,){
  return request({url: `http://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/followers/contains`,method:'get',params,}).then(res => {
 		return res.data
 	})}

@@ -2,31 +2,31 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getGists(params,){
+export function getGistsFrom(params,){
  return request({url: `http://api.github.com/gists`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function postGists(data,){
+export function postGistsFrom(data,){
  return request({url: `http://api.github.com/gists`,method:'post',data,}).then(res => {
 		return res.data
 	})}
-export function getGistsPublic(params,){
+export function getPublicFromGists(params,){
  return request({url: `http://api.github.com/gists/public`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getGistsStarred(params,){
+export function getStarredFromGists(params,){
  return request({url: `http://api.github.com/gists/starred`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function deleteGistsById(id,){
+export function deleteGistsByIdFrom(id,){
  return request({url: `http://api.github.com/gists/${id}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getGistsById(id,){
+export function getGistsByIdFrom(id,){
  return request({url: `http://api.github.com/gists/${id}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchGistsById(id,data,){
+export function patchGistsByIdFrom(id,data,){
  return request({url: `http://api.github.com/gists/${id}`,method:'patch',data,}).then(res => {
 		return res.data
 	})}

@@ -33,6 +33,7 @@ function handleSwagger(data, dir, name, prepend) {
     for (var key in paths) {
         var u = key.toString().replace(/{/g, '${');
         u = u.replace(/\${(\w*)-(\w*)}?/g, '${$1_$2}');
+        var pathps = paths[key].parameters;
         var ms = Object.keys(paths[key]);
         ms = ms.filter(function (el) {
             return el !== 'parameters';
@@ -55,17 +56,23 @@ function handleSwagger(data, dir, name, prepend) {
                     }
                 }
             }
+            if (pathps) {
+                for (var _b = 0, pathps_1 = pathps; _b < pathps_1.length; _b++) {
+                    var pathp = pathps_1[_b];
+                    a.needs[pathp.name] = pathp["in"];
+                }
+            }
             for (var need in a.needs) {
                 a[a.needs[need]].push(need);
             }
-            console.log(a);
+            // console.log(a);
             apis.push(a);
         }
     }
     var fileHead = "import request from '@/plugins/axios'\n\n//host:" + host + "\n\n";
     var pres = new Map();
-    for (var _b = 0, apis_1 = apis; _b < apis_1.length; _b++) {
-        var api = apis_1[_b];
+    for (var _c = 0, apis_1 = apis; _c < apis_1.length; _c++) {
+        var api = apis_1[_c];
         // console.log(api);
         var fileName = api.url.split(/\b/)[1];
         if (!pres.has(fileName)) {
@@ -85,9 +92,7 @@ function handleSwagger(data, dir, name, prepend) {
 }
 function buildApi(api) {
     var tempUrl = api.url.replace(/\$/g, 'By');
-    tempUrl = cleanString(tempUrl).replace(/(([\/{])|})/g, '');
-    var re = /{([a-zA-Z]+)}/g;
-    // console.log(ar)
+    tempUrl = array2String(url2Array(tempUrl)).replace(/[^A-Za-z]/g, '');
     var hasQuery = api.query.length > 0;
     var hasBody = api.body.length > 0;
     return "export function " + api.method + tempUrl + "(" + array2String(api.path) + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "){\n return request({url: `http://" + (api.prepend ? api.prepend : api.host) + api.url + "`,method:'" + api.method + "'," + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "}).then(res => {\n\t\treturn res.data\n\t})}\n";
@@ -103,35 +108,36 @@ function array2String(ar) {
     }
     return str.replace(/([{}])/g, '');
 }
-function cleanString(str) {
-    var arr = str.split(/\W/);
-    var arr2 = str.split(/\//).reverse();
-    var prep = [];
-    var num = checkVars(arr2);
-    var count = 3;
-    if (num > 0) {
-        count = num;
+function url2Array(str) {
+    // console.log(str);
+    var arr = str.split(/\//);
+    arr = arr
+        .filter(function (res) { return res !== ''; })
+        .map(function (a) {
+        return a.replace(/By{([a-z]?)/, function (word, res1) {
+            return 'By{' + res1.toUpperCase();
+        }).replace(/\.json/, '')
+            .replace(/\./g, '')
+            .replace(/\b([a-z]?)/g, function (word, res) {
+            return res.toUpperCase();
+        });
+    });
+    // console.log(arr);
+    var arr2 = arr.slice().reverse();
+    var n = checkVars(arr2);
+    var arrr = [];
+    for (var i = 0; i < n; i++) {
+        arrr.push(arr.pop());
     }
-    arr = arr.filter(function (res) { return res !== ''; });
-    for (var i = 0; i < count; i++) {
-        prep.push(arr.pop());
-    }
-    prep.reverse();
-    prep = prep.concat('From');
-    arr.splice.apply(arr, [0, 0].concat(prep));
-    // if (arr[arr.length - 1] === 'By') {
-    // 	arr.pop();
-    // }
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i])
-            arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).replace(/_/, '');
-    }
-    return arr.join('').replace(/From$/, '');
+    arr.splice(0, 0, 'From');
+    arr.splice.apply(arr, [0, 0].concat(arrr.reverse()));
+    console.log(arr);
+    return arr;
 }
 function checkVars(arr) {
     for (var i = 0; i < arr.length; i++) {
-        if (arr[i].match(/{/)) {
-            return i;
+        if (!arr[i].match(/^By{/)) {
+            return i + 1;
         }
     }
 }
