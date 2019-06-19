@@ -26,39 +26,48 @@ function run() {
     }
 }
 function handleSwagger(data, dir, name, prepend) {
-    var host = data.host + data.basePath;
+    var host = data.host + ((data.basePath === '/') ? '' : data.basePath);
     var paths = data.paths;
+    var publicParams = data.parameter;
     var apis = [];
     for (var key in paths) {
         var u = key.toString().replace(/{/g, '${');
+        u = u.replace(/\${(\w*)-(\w*)}?/g, '${$1_$2}');
         var ms = Object.keys(paths[key]);
+        ms = ms.filter(function (el) {
+            return el !== 'parameters';
+        });
         for (var _i = 0, ms_1 = ms; _i < ms_1.length; _i++) {
             var m = ms_1[_i];
-            var a = { url: u, method: m, host: host, prepend: prepend };
+            var a = { url: u, method: m, host: host, prepend: prepend, needs: {}, query: [], path: [], body: [] };
             var parameters = paths[key][m].parameters;
             if (parameters) {
-                a.params = new Map();
                 for (var _a = 0, parameters_1 = parameters; _a < parameters_1.length; _a++) {
-                    var param = parameters_1[_a];
-                    if (param["in"] === 'body') {
-                        a.hasBody = true;
+                    var p = parameters_1[_a];
+                    if (p['$ref']) {
+                        p = publicParams[getLastWord(p.$ref)];
                     }
-                    if (param["in"] === 'query') {
-                        a.hasParams = true;
+                    if (p.name !== 'Accept') {
+                        if (p["in"] === 'path') {
+                            p.name = p.name.replace('-', '_');
+                        }
+                        a.needs[p.name] = p["in"];
                     }
-                    a.params.set(param.name, param["in"]);
                 }
             }
+            for (var need in a.needs) {
+                a[a.needs[need]].push(need);
+            }
+            console.log(a);
             apis.push(a);
         }
     }
     var fileHead = "import request from '@/plugins/axios'\n\n//host:" + host + "\n\n";
-    var re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
     var pres = new Map();
     for (var _b = 0, apis_1 = apis; _b < apis_1.length; _b++) {
         var api = apis_1[_b];
         // console.log(api);
-        var fileName = re.exec(api.url)[1];
+        var fileName = api.url.split(/\b/)[1];
         if (!pres.has(fileName)) {
             pres.set(fileName, []);
         }
@@ -78,13 +87,16 @@ function buildApi(api) {
     var tempUrl = api.url.replace(/\$/g, 'By');
     tempUrl = cleanString(tempUrl).replace(/(([\/{])|})/g, '');
     var re = /{([a-zA-Z]+)}/g;
-    var ar = api.url.match(re);
     // console.log(ar)
-    console.log(api.params);
-    return "export function " + api.method + tempUrl + "(" + array2String(api.params) + "){return request({url: `http://" + (api.prepend ? api.prepend : api.host) + api.url + "`,method:'" + api.method + "',data,}).then(res => {\n\t\treturn res.data\n\t})}";
+    var hasQuery = api.query.length > 0;
+    var hasBody = api.body.length > 0;
+    return "export function " + api.method + tempUrl + "(" + array2String(api.path) + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "){\n return request({url: `http://" + (api.prepend ? api.prepend : api.host) + api.url + "`,method:'" + api.method + "'," + (hasQuery ? 'params,' : '') + (hasBody ? 'data,' : '') + "}).then(res => {\n\t\treturn res.data\n\t})}\n";
 }
 function array2String(ar) {
     var str = '';
+    if (!ar || ar.length === 0) {
+        return '';
+    }
     for (var _i = 0, ar_1 = ar; _i < ar_1.length; _i++) {
         var i = ar_1[_i];
         str = str.concat(i + ",");
@@ -101,7 +113,6 @@ function cleanString(str) {
         count = num;
     }
     arr = arr.filter(function (res) { return res !== ''; });
-    console.log(arr);
     for (var i = 0; i < count; i++) {
         prep.push(arr.pop());
     }
@@ -122,5 +133,10 @@ function checkVars(arr) {
         if (arr[i].match(/{/)) {
             return i;
         }
+    }
+}
+function getLastWord(str) {
+    if (str.match(/^#\//)) {
+        return str.split('/').pop();
     }
 }

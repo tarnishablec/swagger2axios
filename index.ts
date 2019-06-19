@@ -22,39 +22,48 @@ function run() {
 }
 
 function handleSwagger(data, dir, name, prepend) {
-	let host = data.host + data.basePath;
+	let host = data.host + ((data.basePath === '/') ? '' : data.basePath);
 	let paths = data.paths;
+	let publicParams = data.parameter;
 	let apis = [];
 
 	for (let key in paths) {
 		let u = key.toString().replace(/{/g, '${');
+		u = u.replace(/\${(\w*)-(\w*)}?/g, '${$1_$2}');
 		let ms = Object.keys(paths[key]);
+		ms = ms.filter(el => {
+			return el !== 'parameters';
+		});
 		for (let m of ms) {
-			let a: any = {url: u, method: m, host: host, prepend: prepend};
+			let a = {url: u, method: m, host: host, prepend: prepend, needs: {}, query: [], path: [], body: []};
 			let parameters = paths[key][m].parameters;
 			if (parameters) {
-				a.params = new Map<string, string>();
-				for (let param of parameters) {
-					if (param.in === 'body') {
-						a.hasBody = true;
+				for (let p of parameters) {
+					if (p['$ref']) {
+						p = publicParams[getLastWord(p.$ref)];
 					}
-					if (param.in === 'query') {
-						a.hasParams = true;
+					if (p.name !== 'Accept') {
+						if (p.in === 'path') {
+							p.name = p.name.replace('-', '_');
+						}
+						a.needs[p.name] = p.in;
 					}
-					a.params.set(param.name, param.in);
 				}
 			}
+			for (let need in a.needs) {
+				a[a.needs[need]].push(need);
+			}
+			console.log(a);
 			apis.push(a);
 		}
 	}
 
 	const fileHead = `import request from '@/plugins/axios'\n\n//host:${host}\n\n`;
-	const re = /^\/([a-z]+)(?:(?:\b|\/)|[A-Z]+)/;
 	let pres = new Map<string, Array<any>>();
 
 	for (let api of apis) {
 		// console.log(api);
-		let fileName = re.exec(api.url)[1];
+		let fileName = api.url.split(/\b/)[1];
 
 		if (!pres.has(fileName)) {
 			pres.set(fileName, []);
@@ -75,23 +84,20 @@ function handleSwagger(data, dir, name, prepend) {
 
 }
 
-function buildApi(api: any) {
+function buildApi(api) {
 	let tempUrl = api.url.replace(/\$/g, 'By');
 
 	tempUrl = cleanString(tempUrl).replace(/(([\/{])|})/g, '');
-
-	let re = /{([a-zA-Z]+)}/g;
-	let ar: Array<string> = api.url.match(re);
-	// console.log(ar)
-	console.log(api.params);
-	return `export function ${api.method}${tempUrl}(${array2String(api.params)}){return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',data,}).then(res => {
+	let hasQuery = api.query.length > 0;
+	let hasBody = api.body.length > 0;
+	return `export function ${api.method}${tempUrl}(${array2String(api.path)}${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}){\n return request({url: \`http://${api.prepend ? api.prepend : api.host}${api.url}\`,method:'${api.method}',${hasQuery ? 'params,' : ''}${hasBody ? 'data,' : ''}}).then(res => {
 		return res.data
-	})}`;
+	})}\n`;
 }
 
 function array2String(ar: Array<String>) {
 	let str = '';
-	if (!ar) {
+	if (!ar || ar.length === 0) {
 		return '';
 	}
 	for (let i of ar) {
@@ -111,8 +117,6 @@ function cleanString(str: string) {
 	}
 
 	arr = arr.filter(res => res !== '');
-
-	console.log(arr);
 
 	for (let i = 0; i < count; i++) {
 		prep.push(arr.pop());
@@ -140,6 +144,12 @@ function checkVars(arr: Array<string>) {
 		if (arr[i].match(/{/)) {
 			return i;
 		}
+	}
+}
+
+function getLastWord(str: string) {
+	if (str.match(/^#\//)) {
+		return str.split('/').pop();
 	}
 }
 
