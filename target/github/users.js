@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getUsersFrom(params,){
+export function getUsers(params,){
  return request({url: `http://api.github.com/users`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getUsersByUsernameFrom(username,){
+export function getUsersByUsername(username,){
  return request({url: `http://api.github.com/users/${username}`,method:'get',}).then(res => {
 		return res.data
 	})}

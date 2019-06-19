@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getUsersByUseridFrom(user_id,){
+export function getUsersByUserid(user_id,){
  return request({url: `http://api.spotify.com/v1/users/${user_id}`,method:'get',}).then(res => {
 		return res.data
 	})}

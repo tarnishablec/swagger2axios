@@ -136,6 +136,9 @@ function url2Array(str: string) {
 	arr.splice(0, 0, 'From');
 	arr.splice(0, 0, ...arrr.reverse());
 	console.log(arr);
+	if (arr[arr.length - 1] === 'From') {
+		arr.pop();
+	}
 	return arr;
 }
 

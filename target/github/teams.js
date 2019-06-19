@@ -2,15 +2,15 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function deleteTeamsByTeamIdFrom(teamId,){
+export function deleteTeamsByTeamId(teamId,){
  return request({url: `http://api.github.com/teams/${teamId}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getTeamsByTeamIdFrom(teamId,){
+export function getTeamsByTeamId(teamId,){
  return request({url: `http://api.github.com/teams/${teamId}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchTeamsByTeamIdFrom(teamId,data,){
+export function patchTeamsByTeamId(teamId,data,){
  return request({url: `http://api.github.com/teams/${teamId}`,method:'patch',data,}).then(res => {
 		return res.data
 	})}

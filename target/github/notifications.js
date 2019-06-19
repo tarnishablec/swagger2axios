@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getNotificationsFrom(params,){
+export function getNotifications(params,){
  return request({url: `http://api.github.com/notifications`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function putNotificationsFrom(data,){
+export function putNotifications(data,){
  return request({url: `http://api.github.com/notifications`,method:'put',data,}).then(res => {
 		return res.data
 	})}

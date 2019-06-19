@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getGistsFrom(params,){
+export function getGists(params,){
  return request({url: `http://api.github.com/gists`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function postGistsFrom(data,){
+export function postGists(data,){
  return request({url: `http://api.github.com/gists`,method:'post',data,}).then(res => {
 		return res.data
 	})}
@@ -18,15 +18,15 @@ export function getStarredFromGists(params,){
  return request({url: `http://api.github.com/gists/starred`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function deleteGistsByIdFrom(id,){
+export function deleteGistsById(id,){
  return request({url: `http://api.github.com/gists/${id}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getGistsByIdFrom(id,){
+export function getGistsById(id,){
  return request({url: `http://api.github.com/gists/${id}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchGistsByIdFrom(id,data,){
+export function patchGistsById(id,data,){
  return request({url: `http://api.github.com/gists/${id}`,method:'patch',data,}).then(res => {
 		return res.data
 	})}

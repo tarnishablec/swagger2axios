@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function postMarkdownFrom(data,){
+export function postMarkdown(data,){
  return request({url: `http://api.github.com/markdown`,method:'post',data,}).then(res => {
 		return res.data
 	})}

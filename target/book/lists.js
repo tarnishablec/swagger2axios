@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.nytimes.com/svc/books/v3
 
-export function getListsByFormatFrom(format,params,){
+export function getListsByFormat(format,params,){
  return request({url: `http://api1/lists.${format}`,method:'get',params,}).then(res => {
 		return res.data
 	})}
@@ -18,7 +18,7 @@ export function getOverviewByFormatFromLists(format,params,){
  return request({url: `http://api1/lists/overview.${format}`,method:'get',params,}).then(res => {
 		return res.data
 	})}
-export function getListsByDateByListFrom(date,list,params,){
+export function getListsByDateByList(date,list,params,){
  return request({url: `http://api1/lists/${date}/${list}.json`,method:'get',params,}).then(res => {
 		return res.data
 	})}

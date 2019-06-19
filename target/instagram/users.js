@@ -18,7 +18,7 @@ export function getRequestedByFromUsersSelf(){
  return request({url: `http://api.instagram.com/v1/users/self/requested-by`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getUsersByUseridFrom(user_id,){
+export function getUsersByUserid(user_id,){
  return request({url: `http://api.instagram.com/v1/users/${user_id}`,method:'get',}).then(res => {
 		return res.data
 	})}

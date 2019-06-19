@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getOrgsByOrgFrom(org,){
+export function getOrgsByOrg(org,){
  return request({url: `http://api.github.com/orgs/${org}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchOrgsByOrgFrom(org,data,){
+export function patchOrgsByOrg(org,data,){
  return request({url: `http://api.github.com/orgs/${org}`,method:'patch',data,}).then(res => {
 		return res.data
 	})}

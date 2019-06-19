@@ -2,7 +2,7 @@ import request from '@/plugins/axios'
 
 //host:api.spotify.com/v1
 
-export function getMeFrom(){
+export function getMe(){
  return request({url: `http://api.spotify.com/v1/me`,method:'get',}).then(res => {
 		return res.data
 	})}

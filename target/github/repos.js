@@ -2,15 +2,15 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function deleteReposByOwnerByRepoFrom(owner,repo,){
+export function deleteReposByOwnerByRepo(owner,repo,){
  return request({url: `http://api.github.com/repos/${owner}/${repo}`,method:'delete',}).then(res => {
 		return res.data
 	})}
-export function getReposByOwnerByRepoFrom(owner,repo,){
+export function getReposByOwnerByRepo(owner,repo,){
  return request({url: `http://api.github.com/repos/${owner}/${repo}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchReposByOwnerByRepoFrom(owner,repo,data,){
+export function patchReposByOwnerByRepo(owner,repo,data,){
  return request({url: `http://api.github.com/repos/${owner}/${repo}`,method:'patch',data,}).then(res => {
 		return res.data
 	})}
@@ -522,7 +522,7 @@ export function getWatchersFromReposByOwnerByRepo(owner,repo,){
  return request({url: `http://api.github.com/repos/${owner}/${repo}/watchers`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getReposByOwnerByRepoByArchiveformatByPathFrom(owner,repo,archive_format,path,){
+export function getReposByOwnerByRepoByArchiveformatByPath(owner,repo,archive_format,path,){
  return request({url: `http://api.github.com/repos/${owner}/${repo}/${archive_format}/${path}`,method:'get',}).then(res => {
 		return res.data
 	})}

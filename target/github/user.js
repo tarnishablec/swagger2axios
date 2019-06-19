@@ -2,11 +2,11 @@ import request from '@/plugins/axios'
 
 //host:api.github.com
 
-export function getUserFrom(){
+export function getUser(){
  return request({url: `http://api.github.com/user`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function patchUserFrom(data,){
+export function patchUser(data,){
  return request({url: `http://api.github.com/user`,method:'patch',data,}).then(res => {
 		return res.data
 	})}

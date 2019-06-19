@@ -14,7 +14,7 @@ export function getShortcodeByShortcodeFromMedia(shortcode,){
  return request({url: `http://api.instagram.com/v1/media/shortcode/${shortcode}`,method:'get',}).then(res => {
 		return res.data
 	})}
-export function getMediaByMediaidFrom(media_id,){
+export function getMediaByMediaid(media_id,){
  return request({url: `http://api.instagram.com/v1/media/${media_id}`,method:'get',}).then(res => {
 		return res.data
 	})}
