@@ -16,7 +16,7 @@ add 'prepend' field if you want to replace your host to a specific prepend (not 
 
 run
 ```
-node indexold.js  
+node index.js  
 ```
 
 done
